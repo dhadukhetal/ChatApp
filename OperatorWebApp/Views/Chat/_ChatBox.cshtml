@@ -1,0 +1,43 @@
+﻿<div class="col-md-8">
+    <div class="box box-primary direct-chat direct-chat-primary">
+        <!-- ChatBox Header-->
+        <div class="box-header with-border">
+            <h3 class="box-title" style="color: dimgrey;">Welcome to ChatApp <span id='spanUser'></span></h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" id="btnClearChat" data-toggle="tooltip" title="Clear Chat">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+                <span data-toggle="tooltip" id="MsgCountMain" title="0 New Messages" class="badge bg-gray">0</span>
+            </div>
+        </div>
+
+        <!-- ChatBox Body -->
+        <div class="box-body">
+            <!-- Conversations are loaded here -->
+            <div class="box-body" id="chat-box">
+                <div id="divChatWindow" class="direct-chat-messages" style="height: 450px;">
+
+                </div>
+                <div class="direct-chat-contacts">
+                    <ul class="contacts-list" id="ContactList">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ChatBox Footer-->
+        <div class="box-footer">
+            <textarea id="txtMessage"></textarea>
+            <div class="input-group" style="float: right;">
+                <input class="form-control" style="visibility: hidden;" />
+                <span class="input-group-btn">
+                    <input type="button" class="btn btn-primary btn-flat" id="btnSendMsg" value="send" />
+                </span>
+                <div class="upload-btn-wrapper">
+                    <button id="btnFile" class="btn btn-default btn-flat"><i class="glyphicon glyphicon-paperclip"></i></button>
+                </div>
+            </div>
+            <img id="imgDisplay" src="" class="user-image" style="height: 100px;" />
+        </div>
+    </div>
+</div>
