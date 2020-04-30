@@ -1,4 +1,6 @@
-﻿@{
+﻿
+@{
+    
     Layout = null;
 }
 <!DOCTYPE html>
@@ -31,7 +33,8 @@
 </head>
 <body>
     <form id="frmChat">
-        <input type="hidden" id="hdnOperatorID" name="name" value="@ViewBag.OperatorId" />
+        <input type="hidden" id="hdnOperatorID" name="OperatorID" value="@ViewBag.OperatorId" />
+        <input type="hidden" id="hdnDisplayName" name="Operator_UserName" value="@ViewBag.Operator_DisplayName" />
         <div class="content-wrapper">
             @Html.Partial("_ChatHeader")
             <div class="row">
@@ -53,7 +56,7 @@
                 @Html.Partial("_PrivateChat")
                 <input id="hdUserName" type="hidden" />
                 <input id="PWCount" type="hidden" value="info" />
-               
+
             </div>
         </div>
     </form>
@@ -62,7 +65,8 @@
     <script>
         $(function () {
             $("#txtMessage").emojioneArea();
-            console.log($('#hdnOperatorID').val());
+            console.log("Operator_ID ",$('#hdnOperatorID').val());
+            console.log("Operator_Display_Name : ",$('#hdnDisplayName').val());
         });
     </script>
 </body>

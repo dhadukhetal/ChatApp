@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Elegant Account Login Form with Avatar Icon</title>
+    <title>Login</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -120,7 +120,6 @@
 <body>
     <div class="login-form">
         <div id="message"></div>
-        @Html.Partial("_hiddenFields")
         <form id="frmLogin" name="frmLogin" action="#" role="form">
             <div class="avatar"><i class="material-icons">&#xE7FF;</i></div>
             <h4 class="modal-title">Login to Your Account</h4>
@@ -193,16 +192,13 @@
                                     $.post('/Operator/SetVariable',
                                         data.DataList
                                         , function (data) {
-                                            alert("Success " + data.success);
+                                            //alert("Success " + data.success);
+                                            window.location.href = '/Chat';
                                         });
 
-                                    $('#hdnOperatorID').val(data.DataList.OperatorId);
-                                    $('#hdnDisplayName').val(data.DataList.DisplayName);
-                                    $('#hdnOperatorMaxUserConnectionLimit').val(data.DataList.OperatorMaxUserConnectionLimit);
-                                    $('#hdnOnHoldDefaultMessage').val(data.DataList.OnHoldDefaultMessage);
-
+                                
                                     //console.log($('#hdnOperatorID').val());
-                                    window.location.href = '/Chat';
+                                    
                                 }
                                 else {
                                     $("#message").css('display', 'block');

@@ -18,7 +18,7 @@ namespace ChatApi.Controllers
         public ActionResult SetVariable(vmOperator vmOperator)
         {
             Session["OperatorId"] = vmOperator.OperatorId;
-
+            Session["Operator_DisplayName"] = vmOperator.DisplayName;
             return this.Json(new { success = true });
         }
 

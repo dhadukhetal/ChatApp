@@ -4,9 +4,9 @@ var _HubUrl = "http://chatapi.saaction.in/signalr";
 $(function () {
     //Reference to simpleHub proxy
     var chatHubProxy;
-
+    var _Operator_Display_Name = $("#hdnDisplayName").val();
     // get online user
-
+    //alert(_Operator_Display_Name);
     function getOnlineUser() {
         
         $.ajax({
@@ -23,11 +23,11 @@ $(function () {
                 if (data.MessageType == 1) {
                     console.log(data);
                     $.each(data.DataList, function (index, value) {
-                        console.log(value);
+                       // console.log(value);
                         //AddUser(id, name, UserImage, date, chatHub)
                         //{UserId: 15, UserName: "Emma", FirstName: "Emma", LastName: "Stone"}
                         //example : AddUser(id, msg, "../images/dummy.png", senderid, chatHubProxy);
-                        AddUser(value.UserId, value.UserName + ' ' + value.LastName, "../images/dummy.png", new Date().toLocaleString(), chatHubProxy);
+                        AddUser(value.UserId, value.UserName + ' ' + value.LastName, "../images/dummy.png", new Date().toLocaleString(), chatHubProxy, value.UserToken);
                     });
                 }
                 else {
@@ -46,13 +46,7 @@ $(function () {
         });
 
     }
-    getOnlineUser();
-    
-
-    //Write given text to log area
-    function writeToLog(log) {
-        $("#txtLog").append(log + "&#10;&#13;");
-    }
+  
 
     //Connect to the SignalR server and get the proxy for chatHub
     function connect() {
@@ -74,7 +68,7 @@ $(function () {
             $.connection.hub.start().done(function () {
 
                 writeToLog("Connected.");
-
+                getOnlineUser();
                 try {
                     // chatHubProxy.server.groupconnect("Operator 1",1, "_connectid", "555");
                 } catch (e) { alert(e.message); }
@@ -83,16 +77,11 @@ $(function () {
                 //chatHubProxy.server.setUserName($('#txtUserName').val());
             });
 
-            chatHubProxy.client.receiveMessage = function (msgFrom, msg, senderid, id) {
+            chatHubProxy.client.receiveMessage = function (msgFrom, msg, sender,datetime) {
                 alert(msgFrom);
-                if (msgFrom == "NewConnection") {
-                    AddUser(id, msg, "../images/dummy.png", senderid, chatHubProxy);
-                }
-                else {
-                   // AddMessage(id, msgFrom, msg, "../images/dummy.png", senderid);
-                }
-                writeToLog("msgFrom :" + msgFrom + "/ senderid : " + senderid + " / Message : " + msg);
-
+                writeToLog("msgFrom :" + msgFrom + " || senderid : " + sender + " || Message : " + msg + " || Date : " + datetime);
+                //AddMessage(windowId, fromUserName, message, userimg, CurrentDateTime)
+                AddMessage(sender, msgFrom, msg, "../images/dummy.png", datetime);
             };
 
         });
@@ -102,14 +91,14 @@ $(function () {
     connect();
 
 
-    function AddUser(id, name, UserImage, date, chatHub) {
+    function AddUser(_userId, _UserName, UserImage, date, chatHub,UserToken) {
 
         //var userId = $('#hdId').val();
         var code, Clist;
         code = $('<div class="box-comment">' +
             ' <img class="img-circle img-sm" src="' + UserImage + '" alt="User Image" />' +
             ' <div class="comment-text">' +
-            ' <span class="username">' + name + '<span class="text-muted pull-right">' + date + '</span>  </span></div></div>');
+            ' <span class="username">' + _UserName + '<span class="text-muted pull-right">' + date + '</span>  </span></div></div>');
 
         Clist = $(
             '<li>' +
@@ -117,30 +106,32 @@ $(function () {
             '<img class="contacts-list-img" src="' + UserImage + '" alt="User Image" />' +
 
             ' <div class="contacts-list-info">' +
-            '<span class="contacts-list-name" id="' + id + '">' + name + ' <small class="contacts-list-date pull-right">' + date + '</small> </span>' +
+            ' <span class="contacts-list-name" id="' + UserToken + '">' + _UserName + ' <small class="contacts-list-date pull-right">' + date + '</small> </span>' +
             ' <span class="contacts-list-msg">How have you been? I was...</span></div></a > </li >');
 
-        var UserLink = $('<a id="' + id + '" class="user" >' + name + '<a>');
+        var UserLink = $('<a id="' + UserToken + '" class="user" >' + _UserName + '<a>');
+
         $(code).click(function () {
 
             var id = $(UserLink).attr('id');
 
 
             var ctrId = 'private_' + id;
-            OpenPrivateChatBox(chatHub, id, ctrId, name);
+            OpenPrivateChatBox(chatHub, id, ctrId, _UserName,UserToken);
 
 
 
         });
 
-        var link = $('<span class="contacts-list-name" id="' + id + '">');
+        var link = $('<span class="contacts-list-name" id="' + UserToken + '">');
+
         $(Clist).click(function () {
 
             var id = $(link).attr('id');
 
 
             var ctrId = 'private_' + id;
-            OpenPrivateChatBox(chatHub, id, ctrId, name);
+            OpenPrivateChatBox(chatHub, id, ctrId, _UserName,UserToken);
 
 
 
@@ -164,10 +155,10 @@ $(function () {
             PWClass = 'info';
 
         $('#PWCount').val(PWClass);
-        var div1 = ' <div class="col-md-4"> <div  id="' + ctrId + '" class="box box-solid box-' + PWClass + ' direct-chat direct-chat-' + PWClass + '">' +
+        var div1 = ' <div class="col-md-4"> <div  id="' + ctrId + '" data-username="' + userName +'" data-token="'+ userToken +'" class="box box-solid box-' + PWClass + ' direct-chat direct-chat-' + PWClass + '">' +
             '<div class="box-header with-border">' +
             ' <h3 class="box-title">' + userName + '</h3>' +
-
+           
             ' <div class="box-tools pull-right">' +
             ' <span data-toggle="tooltip" id="MsgCountP" title="0 New Messages" class="badge bg-' + PWClass + '">0</span>' +
             ' <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
@@ -190,6 +181,7 @@ $(function () {
             '    <input type="text" name="message" placeholder="Type Message ..." class="form-control" style="visibility:hidden;" />' +
             '   <span class="input-group-btn">' +
             '          <input type="button" id="btnSendMessage" class="btn btn-' + PWClass + ' btn-flat" value="send" />' +
+            '          <button id="btnFile" class="btn btn-default btn-flat"><i class="glyphicon glyphicon-paperclip"></i></button>' +
             '   </span>' +
 
 
@@ -210,12 +202,14 @@ $(function () {
         // Send Button event in Private Chat
         $div.find("#btnSendMessage").click(function () {
 
+            
             $textBox = $div.find("#txtPrivateMessage");
 
             var msg = $textBox.val();
             if (msg.length > 0) {
                 //chatHub.server.sendPrivateMessage(userId, msg);
-                chatHub.server.broadCastMessage("Web-Operator", msg, userId);
+                
+                chatHubProxy.server.broadCastMessage(_Operator_Display_Name, msg, userId);
                 $textBox.val('');
             }
         });
@@ -237,6 +231,7 @@ $(function () {
         // Append private chat div inside the main div
         $('#PriChatDiv').append($div);
         chatHubProxy.server.groupconnect(userName, userId, "_connectid", userToken);
+
         //chatHubProxy.server.groupconnect("Operator 1", 1, "_connectid", "555");
         var msgTextbox = $div.find("#txtPrivateMessage");
         $(msgTextbox).emojioneArea();
@@ -247,15 +242,15 @@ $(function () {
         var ctrId = 'private_' + windowId;
         if ($('#' + ctrId).length == 0) {
 
-            OpenPrivateChatBox(chatHub, windowId, ctrId, fromUserName, userimg);
+            OpenPrivateChatBox(chatHub, windowId, ctrId, fromUserName, "");
 
         }
 
-        var CurrUser = $('#hdUserName').val();
+//        var CurrUser = $('#hdUserName').val();
         var Side = 'right';
         var TimeSide = 'left';
 
-        if (CurrUser == fromUserName) {
+        if (_Operator_Display_Name == fromUserName) {
             Side = 'left';
             TimeSide = 'right';
 
@@ -288,5 +283,9 @@ $(function () {
         });
     }
 
+    //Write given text to log area
+    function writeToLog(log) {
+        $("#txtLog").append(log + "&#10;&#13;");
+    }
     
 });

@@ -13,6 +13,7 @@ namespace ChatApi.Controllers
         {
             //Session["OperatorID"] = 1;
             ViewBag.OperatorId = Session["OperatorId"].ToString();
+            ViewBag.Operator_DisplayName = Session["Operator_DisplayName"].ToString();
             return View();
         }
     }

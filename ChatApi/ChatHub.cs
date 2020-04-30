@@ -17,7 +17,9 @@ namespace ChatApi
         {
             var id = Context.ConnectionId;
             string[] Exceptional = new string[0];
-            Clients.Group(GroupName, Exceptional).receiveMessage(msgFrom, msg, "");
+            // chatHubProxy.client.receiveMessage = function (msgFrom, msg, sender,datetime)
+            Clients.Group(GroupName, Exceptional).receiveMessage(msgFrom, msg, GroupName,DateTime.Now.ToString());
+            //Clients.Caller.receiveMessage(msgFrom, msg, GroupName, DateTime.Now.ToString());
             //Clients.All.receiveMessage(msgFrom, msg, "");
             /*string[] Exceptional = new string[1];
             Exceptional[0] = id;       
@@ -36,8 +38,8 @@ namespace ChatApi
             string[] Exceptional = new string[1];
             Exceptional[0] = id;
             //function (msgFrom, msg, senderid,id)
-            Clients.Caller.receiveMessage("Group Chat Hub", msg, list,id);
-            Clients.OthersInGroup(GroupName).receiveMessage("NewConnection", username, DateTime.Now.ToString(), GroupName);
+            Clients.Caller.receiveMessage(username, msg, GroupName, DateTime.Now.ToString());
+            Clients.OthersInGroup(GroupName).receiveMessage(username, msg, GroupName, DateTime.Now.ToString());
             //Clients.AllExcept(Exceptional).receiveMessage("NewConnection", username + " " + id, count);
         }
     }
