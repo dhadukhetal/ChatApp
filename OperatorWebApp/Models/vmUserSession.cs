@@ -20,5 +20,6 @@ namespace OperatorWebApp.Models
         public string DisplayName { get; set; }
         public string OperatorMaxUserConnectionLimit { get; set; }
         public string OnHoldDefaultMessage { get; set; }
+        public int ChatSessionId { get; set; }
     }
 }

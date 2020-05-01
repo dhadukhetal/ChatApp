@@ -31,7 +31,7 @@ namespace ChatApi.WebApi
             try
             {
                 _vm._flag = 0;
-                var result = await _obj.ChatSend(_vm);
+                var result = await _obj.ChatMessageSend(_vm);
                 if (result > 0)
                     return new ApiResponse { IsValidUser = true, Message = "success", MessageType = result, DataList = result };
                 else
@@ -100,7 +100,7 @@ namespace ChatApi.WebApi
         /// <returns></returns>  
         [HttpPost]
         //[Route("api/DocumentUpload/MediaUpload")]
-        public async Task<ApiResponse> ChatSend()
+        public async Task<ApiResponse> ChatMessageSend()
         {
             // Check if the request contains multipart/form-data.  
             if (!Request.Content.IsMimeMultipartContent())
@@ -112,7 +112,12 @@ namespace ChatApi.WebApi
             //access form data  
             NameValueCollection formData = provider.FormData;
 
+            /* Value detail :	MessageSentBy = 1: Operator  , 2:Client
+               MessageType = 0: No Attachment , 1:Attachment
+               AttachmentType = 0:Doc , 1:image , 2:video ,3:other */
+
             ChatVM _model = new ChatVM();
+
             _model._operatorId = Convert.ToInt32(formData["OperatorId"].ToString());
             _model._userId = Convert.ToInt32(formData["UserId"].ToString());
             _model._chatSessionId = Convert.ToInt32(formData["ChatSessionId"].ToString());
@@ -197,7 +202,7 @@ namespace ChatApi.WebApi
             try
             {
                 _vm._flag = 0;
-                var result = await _obj.ChatSend(_vm);
+                var result = await _obj.ChatMessageSend(_vm);
                 if (result > 0)
                     return new ApiResponse { IsValidUser = true, Message = "success", MessageType = result, DataList = result };
                 else

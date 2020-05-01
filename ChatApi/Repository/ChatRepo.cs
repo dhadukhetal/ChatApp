@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace ChatApi.Repository
 {
-    public class ChatRepo : IChat
+    public class ChatRepo : IChat, IDisposable
     {
         CommonDB objCommonDB = new CommonDB();
-        public async Task<int> ChatSend(ChatVM _chat)
+        public async Task<int> ChatMessageSend(ChatVM _chat)
         {
             try
             {
-                using (SqlCommand dataCmd = new SqlCommand("ChatSend", objCommonDB.con))
+                using (SqlCommand dataCmd = new SqlCommand("ChatMessageSend", objCommonDB.con))
                 {
                     dataCmd.CommandType = CommandType.StoredProcedure;
 
@@ -103,6 +103,60 @@ namespace ChatApi.Repository
                 if (objCommonDB.con.State == ConnectionState.Open)
                     objCommonDB.con.Close();
             }
+        }
+
+        // Other functions go here...
+
+
+        public Int32 ChatMessageSend1(ChatVM _chat)
+        {
+            try
+            {
+                using (SqlCommand dataCmd = new SqlCommand("ChatMessageSend", objCommonDB.con))
+                {
+                    dataCmd.CommandType = CommandType.StoredProcedure;
+
+                    dataCmd.Parameters.AddWithValue("@flag", _chat._flag);
+                    dataCmd.Parameters["@flag"].Direction = ParameterDirection.InputOutput;
+
+                    dataCmd.Parameters.Add(new SqlParameter("@OperatorId", _chat._operatorId));
+                    dataCmd.Parameters.Add(new SqlParameter("@UserId", _chat._userId));
+                    dataCmd.Parameters.Add(new SqlParameter("@ChatSessionId", _chat._chatSessionId));
+                    dataCmd.Parameters.Add(new SqlParameter("@Msg", _chat._message));
+                    dataCmd.Parameters.Add(new SqlParameter("@MessageSentBy", _chat._messageSentBy));
+                    dataCmd.Parameters.Add(new SqlParameter("@MessageType", _chat._messageType));
+                    dataCmd.Parameters.Add(new SqlParameter("@AttachmentType", _chat._attachmentType));
+                    dataCmd.Parameters.Add(new SqlParameter("@filePath", _chat._filePath));
+                    dataCmd.Parameters.Add(new SqlParameter("@Token", _chat._token));
+                    if (objCommonDB.con.State == ConnectionState.Closed)
+                        objCommonDB.con.Open();
+                    dataCmd.ExecuteNonQuery();
+                    return Convert.ToInt32(dataCmd.Parameters["@flag"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            finally
+            {
+                if (objCommonDB.con.State == ConnectionState.Open)
+                    objCommonDB.con.Close();
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+            }
+            // free native resources if there are any.
         }
     }
 }

@@ -35,6 +35,8 @@
     <form id="frmChat">
         <input type="hidden" id="hdnOperatorID" name="OperatorID" value="@ViewBag.OperatorId" />
         <input type="hidden" id="hdnDisplayName" name="Operator_UserName" value="@ViewBag.Operator_DisplayName" />
+        <input type="hidden" id="hdnChatSessionId" name="Operator_UserName" value="@ViewBag.ChatSessionId" />
+
         <div class="content-wrapper">
             @Html.Partial("_ChatHeader")
             <div class="row">

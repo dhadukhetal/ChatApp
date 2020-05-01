@@ -9,7 +9,7 @@ namespace ChatApi.ServiceContract
 {
     public interface IChat
     {
-        Task<int> ChatSend(ChatVM _chat);
+        Task<int> ChatMessageSend(ChatVM _chat);
         Task<RespRepoVM> ChatReceivedByTime(ChatVM _vm);
         Task<int> ChatSignOut(ChatVM _chat);
     }

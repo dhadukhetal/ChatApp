@@ -1,10 +1,14 @@
-﻿var _IntervalVal;
+﻿
+
+var _IntervalVal;
 //var _HubUrl = "http://localhost:58786/signalr";
 var _HubUrl = "http://chatapi.saaction.in/signalr";
 $(function () {
     //Reference to simpleHub proxy
     var chatHubProxy;
     var _Operator_Display_Name = $("#hdnDisplayName").val();
+    var _chatSessionID = $("#hdnChatSessionId").val();
+    var OperatorID = $("#hdnOperatorID").val();
     // get online user
     //alert(_Operator_Display_Name);
     function getOnlineUser() {
@@ -12,7 +16,7 @@ $(function () {
         $.ajax({
             type: "POST",
             url: "http://chatapi.saaction.in/api/Users/GetOnlineUserListByOperatorID",
-            //url: "http://localhost:58786/api/AuthAPI/OperatorLogin",
+            //url: "http://localhost:58786/api/Users/GetOnlineUserListByOperatorID",
             data: {
                 OperatorID: $("#hdnOperatorID").val()
             },
@@ -21,13 +25,13 @@ $(function () {
             async: true,
             success: function (data) {
                 if (data.MessageType == 1) {
-                    console.log(data);
+                    //console.log(data);
                     $.each(data.DataList, function (index, value) {
                        // console.log(value);
                         //AddUser(id, name, UserImage, date, chatHub)
                         //{UserId: 15, UserName: "Emma", FirstName: "Emma", LastName: "Stone"}
                         //example : AddUser(id, msg, "../images/dummy.png", senderid, chatHubProxy);
-                        AddUser(value.UserId, value.UserName + ' ' + value.LastName, "../images/dummy.png", new Date().toLocaleString(), chatHubProxy, value.UserToken);
+                        AddUser(value.UserId, value.UserName + ' ' + value.LastName, "../images/dummy.png", new Date().toLocaleString(), chatHubProxy, value.UserToken, value.ChatSessionID);
                     });
                 }
                 else {
@@ -77,6 +81,10 @@ $(function () {
                 //chatHubProxy.server.setUserName($('#txtUserName').val());
             });
 
+            chatHubProxy.client.dbAlert = function (_resp) {
+                alert(_resp);
+            };
+
             chatHubProxy.client.receiveMessage = function (msgFrom, msg, sender,datetime) {
                 alert(msgFrom);
                 writeToLog("msgFrom :" + msgFrom + " || senderid : " + sender + " || Message : " + msg + " || Date : " + datetime);
@@ -91,7 +99,7 @@ $(function () {
     connect();
 
 
-    function AddUser(_userId, _UserName, UserImage, date, chatHub,UserToken) {
+    function AddUser(_userId, _UserName, UserImage, date, chatHub, UserToken, ChatSessionID) {
 
         //var userId = $('#hdId').val();
         var code, Clist;
@@ -117,7 +125,7 @@ $(function () {
 
 
             var ctrId = 'private_' + id;
-            OpenPrivateChatBox(chatHub, id, ctrId, _UserName,UserToken);
+            OpenPrivateChatBox(chatHub, _userId, ctrId, _UserName,UserToken);
 
 
 
@@ -131,9 +139,8 @@ $(function () {
 
 
             var ctrId = 'private_' + id;
-            OpenPrivateChatBox(chatHub, id, ctrId, _UserName,UserToken);
 
-
+            OpenPrivateChatBox(chatHub, _userId, ctrId, _UserName,UserToken);
 
         });
 
@@ -208,9 +215,25 @@ $(function () {
             var msg = $textBox.val();
             if (msg.length > 0) {
                 //chatHub.server.sendPrivateMessage(userId, msg);
-                
-                chatHubProxy.server.broadCastMessage(_Operator_Display_Name, msg, userId);
-                $textBox.val('');
+                //BroadCastMessage1(string UserName, string OperatorName, int OperatorId, int UserId, int ChatSessionId, string Message, int MessageSentBy, int MessageType, int AttachmentType, string Token)
+                //chatHubProxy.server.broadCastMessage(_Operator_Display_Name, msg, userId);
+                //chatHubProxy.server.broadCastMessage1(userName, _Operator_Display_Name, OperatorID, userId, _chatSessionID, msg, 1, 0, userToken);
+                var _chatvm = {
+                    _operatorId: OperatorID,
+                    _userId: userId,
+                    _chatSessionId: _chatSessionID,
+                    _message: msg,
+                    _flag: 0,
+                    _messageSentBy: 1,
+                    _messageType: 0,
+                    _attachmentType: 0,
+                    _filePath: '',
+                    _token: userToken,
+                    _userName: _Operator_Display_Name
+                };
+                chatHubProxy.server.BroadCastMessage(_chatvm);
+
+                //$textBox.val('');
             }
         });
 
@@ -241,7 +264,7 @@ $(function () {
 
         var ctrId = 'private_' + windowId;
         if ($('#' + ctrId).length == 0) {
-
+            // OpenPrivateChatBox(chatHub, userId, ctrId, userName, userToken)
             OpenPrivateChatBox(chatHub, windowId, ctrId, fromUserName, "");
 
         }
@@ -257,7 +280,7 @@ $(function () {
         }
         else {
             var Notification = 'New Message From ' + fromUserName;
-            IntervalVal = setInterval("ShowTitleAlert('SignalR Chat App', '" + Notification + "')", 800);
+            //IntervalVal = setInterval("ShowTitleAlert('SignalR Chat App', '" + Notification + "')", 800);
 
             var msgcount = $('#' + ctrId).find('#MsgCountP').html();
             msgcount++;
@@ -287,5 +310,13 @@ $(function () {
     function writeToLog(log) {
         $("#txtLog").append(log + "&#10;&#13;");
     }
-    
+
+    function ShowTitleAlert(newMessageTitle, pageTitle) {
+        if (document.title == pageTitle) {
+            document.title = newMessageTitle;
+        }
+        else {
+            document.title = pageTitle;
+        }
+    }
 });

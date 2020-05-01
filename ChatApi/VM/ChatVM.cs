@@ -16,5 +16,6 @@ namespace ChatApi.vmModels
         public int _attachmentType { get; set; } // 0:Doc,1:image,2:video,3:other
         public string _filePath { get; set; }   // /ChessionId/fileName.ext(path format )
         public string _token { get; set; }   // /ChessionId/fileName.ext(path format )
+        public string _userName { get; set; }
     }
 }
