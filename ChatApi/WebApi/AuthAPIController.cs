@@ -29,7 +29,7 @@ namespace ChatApi.WebAPI
             try
             {
                 UserDetail objUserDetail = await _loginRepo.UserLogin(objLoginModel);
-                if (objUserDetail.UserId > 0)
+                if (objUserDetail.UserID > 0)
                 {
                     apiResponse = TaskUTL.GenerateApiResponse(true, 1, "Login succeessful", objUserDetail);
                 }
@@ -91,7 +91,7 @@ namespace ChatApi.WebAPI
             try
             {
                 UserDetail objUserDetail = await _loginRepo.UserLogin(objLoginModel);
-                if (objUserDetail.UserId > 0)
+                if (objUserDetail.UserID > 0)
                 {
                     apiResponse = TaskUTL.GenerateApiResponse(true, 1, "login succeessfully", objUserDetail);
                 }

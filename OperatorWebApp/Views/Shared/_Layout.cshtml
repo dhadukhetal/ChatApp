@@ -3,9 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="/Content/style.css" rel="stylesheet" />
+    <link href="/Content/font-awesome.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="http://chatoperator.saaction.in/images/icon200.png">
+    <!--EmojiOneArea -->
+    <link href="/Content/emojionearea.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -16,25 +22,56 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a class="navbar-brand" href="/Chat">
+                    <img src="~/images/icon200.png" alt="" width="20" height="20">
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Chat", "Index", "Chat/App")</li>
+                    <li>@Html.ActionLink("Generate Invite Code", "Index", "GenerateInviteCode")</li>
+                    <li>@Html.ActionLink("Invite Code Register", "Index", "InviteCodeRegister")</li>
+                    <li>@Html.ActionLink("User Register", "Index", "UserRegister")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right mr-auto">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="~/images/DP/dummy.png" class="user-image" alt="User Image" />
+                            <span class="hidden-xs">UserName</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="~/images/dummy.png" class="img-circle" alt="User Image" />
+                                <p style="color: #000000;">
+                                    <!-- user name ahi avse -->
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a class="btn btn-default btn-flat" data-toggle="modal" href="#ChangePic">Change Picture</a>
+                                </div>
+                                <div class="pull-right">
+                                    <Button ID="btnSignOut" Class="btn btn-default btn-flat" OnClick="btnSignOut_Click">Sign Out</Button>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a href="/Account/Login" id="loginLink" class="nav-link">Log Out</a></li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    
+    <div class="container-fluid body-content" style="margin-top:16px;">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
 
+    </div>
+    
+    <footer class="container-fluid text-center bg-gray navbar-fixed-bottom  body-content">
+        <p>&copy; @DateTime.Now.Year - ChatApp</p>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

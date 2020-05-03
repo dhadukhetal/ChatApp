@@ -60,7 +60,8 @@ namespace ChatApi
         public void Get_Connect(String username, String userid, String connectionid, String GroupName)
         {
             string count = "NA";
-            string msg = "Welcome to group " + GroupName;
+            string msg = "Welcome to Chat";
+            //string msg = string.Empty;
             string list = "";
 
             var id = Context.ConnectionId;

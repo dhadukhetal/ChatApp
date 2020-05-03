@@ -20,11 +20,14 @@ namespace ChatApi.vmModels
 
     public class UserDetail
     {
-        public int UserId { get; set; }
+        public int UserID { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int OperatorID { get; set; }
+        public string OperatorName { get; set; }
         public string Token { get; set; }
+        public int ChatSessionID { get; set; }
         public string UpdateDuration { get; set; }
         public string ApiUrl { get; set; }
         public string Exes { get; set; }

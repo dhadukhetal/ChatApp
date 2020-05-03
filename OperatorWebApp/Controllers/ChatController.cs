@@ -17,5 +17,14 @@ namespace ChatApi.Controllers
             ViewBag.ChatSessionId = Session["ChatSessionId"].ToString();
             return View();
         }
+
+        public ActionResult App()
+        {
+            //Session["OperatorID"] = 1;
+            ViewBag.OperatorId = Session["OperatorId"].ToString();
+            ViewBag.Operator_DisplayName = Session["Operator_DisplayName"].ToString();
+            ViewBag.ChatSessionId = Session["ChatSessionId"].ToString();
+            return View("Chat");
+        }
     }
 }

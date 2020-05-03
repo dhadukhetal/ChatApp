@@ -232,7 +232,7 @@ $(function () {
                     _userName: _Operator_Display_Name
                 };
                 chatHubProxy.server.BroadCastMessage(_chatvm);
-
+                $("div.emojionearea-editor").data("emojioneArea").setText('');
                 //$textBox.val('');
             }
         });
@@ -308,7 +308,8 @@ $(function () {
 
     //Write given text to log area
     function writeToLog(log) {
-        $("#txtLog").append(log + "&#10;&#13;");
+        //$("#txtLog").append(log + "&#10;&#13;");
+        console.log(log);
     }
 
     function ShowTitleAlert(newMessageTitle, pageTitle) {

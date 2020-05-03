@@ -41,11 +41,14 @@
             @Html.Partial("_ChatHeader")
             <div class="row">
                 <!-- Chat BOX -->
-                <div class="col-md-8">
-                    <fieldset>
-                        <legend>Log</legend>
-                        <textarea id="txtLog" cols="60" rows="15"></textarea>
-                    </fieldset>
+                <div class="col-md-9">
+                    <div class="row" id="PriChatDiv">
+                    </div>
+                    <textarea class="form-control" style="visibility: hidden;"></textarea>
+                    @*<fieldset>
+            <legend>Log</legend>
+            <textarea id="txtLog" cols="60" rows="15"></textarea>
+        </fieldset>*@
                     @*@Html.Partial("_ChatBox")*@
                 </div>
 
@@ -55,7 +58,7 @@
                 @Html.Partial("_OnlineUserList")
 
                 <!-- Private Chat -->
-                @Html.Partial("_PrivateChat")
+                @*@Html.Partial("_PrivateChat")*@
                 <input id="hdUserName" type="hidden" />
                 <input id="PWCount" type="hidden" value="info" />
 

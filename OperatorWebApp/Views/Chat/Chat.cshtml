@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <form id="frmChat">
+        <input type="hidden" id="hdnOperatorID" name="OperatorID" value="@ViewBag.OperatorId" />
+        <input type="hidden" id="hdnDisplayName" name="Operator_UserName" value="@ViewBag.Operator_DisplayName" />
+        <input type="hidden" id="hdnChatSessionId" name="Operator_UserName" value="@ViewBag.ChatSessionId" />
+
+        <div class="content-wrapper">
+            @*@Html.Partial("_ChatHeader")*@
+            <div class="row">
+                <!-- Chat BOX -->
+                <div class="col-md-9">
+                    <div class="row" id="PriChatDiv">
+                    </div>
+                    <textarea class="form-control" style="visibility: hidden;"></textarea>
+                    @*<fieldset>
+                        <legend>Log</legend>
+                        <textarea id="txtLog" cols="60" rows="15"></textarea>
+                    </fieldset>*@
+                    @*@Html.Partial("_ChatBox")*@
+                </div>
+
+
+
+                <!-- Online User List -->
+                @Html.Partial("_OnlineUserList")
+
+                <!-- Private Chat -->
+                @*@Html.Partial("_PrivateChat")*@
+                <input id="hdUserName" type="hidden" />
+                <input id="PWCount" type="hidden" value="info" />
+
+            </div>
+        </div>
+    </form>
+@section scripts{
+    <!-- Scripts -->
+    @*<script src="/Scripts/jQuery-3.4.1.min.js"></script>*@
+    <script src="/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="/Scripts/date.format.js"></script>
+    <script src="/Scripts/emojionearea.js"></script>
+    <!--Jquery slimScroll -->
+    <script type="text/javascript" src="/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/ChatJS/ChatOperator.js"></script>
+    <script>
+        $(function () {
+            $("#txtMessage").emojioneArea();
+            console.log("Operator_ID ", $('#hdnOperatorID').val());
+            console.log("Operator_Display_Name : ", $('#hdnDisplayName').val());
+        });
+    </script>
+}

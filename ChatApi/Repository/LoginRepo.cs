@@ -21,7 +21,7 @@ namespace ChatApi.Repository
             try
             {
                 UserDetail objUserDetail = new UserDetail();
-                using (SqlCommand dataCmd = new SqlCommand("LoginCheck", objCommonDB.con))
+                using (SqlCommand dataCmd = new SqlCommand("User_Login", objCommonDB.con))
                 {
                     dataCmd.CommandType = CommandType.StoredProcedure;
                     dataCmd.Parameters.AddWithValue("@UserName", objLoginModel.UserName);
@@ -36,11 +36,33 @@ namespace ChatApi.Repository
                         objCommonDB.con.Open();
                     //await dataCmd.ExecuteNonQueryAsync();
                     var reader = await dataCmd.ExecuteReaderAsync();
+                    /*
+                      U.UserID,
+				U.UserName,
+				U.UserToken		AS Token,
+				@ChatSessionID	AS ChatSessionID,
+				U.FirstName,
+				U.LastName,
+				U.OperatorId,
+				U.OperatorNameFixedForever AS OperatorName,
+				@settingVal AS UpdateDuration,
+				@ApiUrl		AS ApiUrl,
+				@UpdateUrl	AS UpdateUrl,
+				d2.FileName,
+				d2.FilePath,
+				d2.VersionId
+                     */
                     while (reader.Read())
                     {
-                        objUserDetail.UserId = Convert.ToInt32(reader["UserID"].ToString());
+                        objUserDetail.UserID = Convert.ToInt32(reader["UserID"].ToString());
                         objUserDetail.UserName = reader["UserName"].ToString();
                         objUserDetail.Token = reader["Token"].ToString();
+                        objUserDetail.ChatSessionID = Convert.ToInt32(reader["ChatSessionID"].ToString());
+                        objUserDetail.FirstName = reader["FirstName"].ToString();
+                        objUserDetail.LastName = reader["LastName"].ToString();
+                        objUserDetail.OperatorID = Convert.ToInt32(reader["OperatorId"].ToString());
+                        objUserDetail.OperatorName = reader["OperatorName"].ToString();
+
                         objUserDetail.UpdateDuration = reader["UpdateDuration"].ToString();
                         objUserDetail.ApiUrl = reader["ApiUrl"].ToString();
                         objUserDetail.Exes = reader["FileName"].ToString();
